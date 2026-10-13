@@ -49,3 +49,30 @@ app = FastAPI(title="Bookkeeper Email Triage API")
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+# Takes an email and returns a plain dictionary:
+
+
+def run_model(email: EmailIn) -> dict:
+    """Placeholder for the AI call. Returns a mock result for now."""
+    text = f"{email.subject} {email.body}".lower()
+    category = "BAS_GST" if "bas" in text else "GENERAL_UNCLEAR"
+    return {
+        "category": category,
+        "urgency": "NORMAL",
+        "summary": "Mock result - no AI used yet",
+        "missing_information": [],
+        "draft_reply": "Hi, thanks for your email. [MOCK DRAFT]",
+        "needs_human_review": True,
+        "review_reason": "mock mode",
+    }
+
+# Run this when someone sends data to /triage (POST is used as it's for submitting email data):
+
+
+# response_model=TriageResult tells FastAPI to validate the output of run_model() against the TriageResult model so that the output is always in the intended format.
+@app.post("/triage", response_model=TriageResult)
+def triage(email: EmailIn):
+    raw = run_model(email)
+    # model_validate forces the result through the TriageResult schema. When the real AI replaces this mock, its answer goes through the same check, so a bad category fails loudly instead of slipping through.
+    return TriageResult.model_validate(raw)
