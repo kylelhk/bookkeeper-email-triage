@@ -1,7 +1,30 @@
-from fastapi import FastAPI
+import os
+import secrets
+
+from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 # Enum limits a field to a fixed list. If the AI invents a category like “TAX_STUFF”, validation fails instead of passing junk downstream.
 from enum import Enum
 from pydantic import BaseModel, Field
+
+# Reads .env into environment variables, so secrets stay out of the code.
+load_dotenv()
+
+# Reads the Authorisation: Bearer <token> header.
+bearer = HTTPBearer(auto_error=False)
+
+
+def require_token(creds: HTTPAuthorizationCredentials | None = Depends(bearer)):
+    expected = os.getenv("API_TOKEN", "")
+    # If no token is configured, the server refuses (500) instead of letting everyone in. Failing closed is deliberate.
+    if not expected:
+        raise HTTPException(status_code=500, detail="Server is not configured")
+    supplied = creds.credentials if creds else ""
+    # secrets.compare_digest compares in constant time, which stops attackers guessing the token by timing responses.
+    if not secrets.compare_digest(supplied.encode(), expected.encode()):
+        raise HTTPException(
+            status_code=401, detail="Invalid or missing bearer token")
 
 
 class Category(str, Enum):
@@ -71,7 +94,7 @@ def run_model(email: EmailIn) -> dict:
 
 
 # response_model=TriageResult tells FastAPI to validate the output of run_model() against the TriageResult model so that the output is always in the intended format.
-@app.post("/triage", response_model=TriageResult)
+@app.post("/triage", response_model=TriageResult, dependencies=[Depends(require_token)])
 def triage(email: EmailIn):
     raw = run_model(email)
     # model_validate forces the result through the TriageResult schema. When the real AI replaces this mock, its answer goes through the same check, so a bad category fails loudly instead of slipping through.
