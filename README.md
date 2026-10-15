@@ -64,8 +64,3 @@ uvicorn app:app --reload
 
 Open http://127.0.0.1:8000/docs to try the endpoints. Use the **Authorize**
 button to enter your token before calling `/triage`. Never commit `.env`.
-
-## How this was built
-
-Built step by step, one commit per step. I used an AI assistant (Claude) for
-guidance and explanations, and wrote, tested, and committed each step myself.
