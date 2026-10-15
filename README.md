@@ -38,12 +38,14 @@ For each email, the API returns a **draft** containing:
 - [x] System prompt
 - [x] Mock `/triage` endpoint (keyword rules, no AI)
 - [x] Bearer-token auth
-- [x] Synthetic test set
-- [x] Real AI model call (Gemini API)
-- [x] Code-level guardrails (e.g. block invented dollar amounts)
-- [x] Automated tests
-- [x] Scoring script and baseline results
-- [ ] Prompt improvement based on failures, with re-scored results
+- [x] Synthetic test set (20 emails: 10 for scoring, 10 held out)
+- [x] Real AI model call (Claude via the Messages API; Gemini also supported through the `PROVIDER` setting, but not used for scoring)
+- [x] Code-level guardrails (e.g. flag invented dollar amounts, force review of ATO notices)
+- [x] Automated tests (20 tests, mock mode, no real AI calls)
+- [x] Scoring script and baseline results on 10 emails
+- [ ] Prompt improvement based on baseline failures, with re-scored results
+- [ ] One run on the 10 held-out emails
+- [ ] Manual check of whether each draft reply is safe to send
 
 ## Test data
 
