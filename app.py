@@ -16,7 +16,7 @@ from google.genai import types
 from pydantic import BaseModel, Field, field_validator
 
 # Reads .env into environment variables, so secrets stay out of the code.
-# override=True: values in .env win over variables already set in the terminal, so a stale `export` can't silently change the provider or token.
+# override=True: Values in .env win over variables already set in the terminal, so a stale `export` can't silently change the provider or token.
 load_dotenv(override=True)
 
 # Reads the Authorization: Bearer <token> header.
@@ -59,7 +59,7 @@ class EmailIn(BaseModel):
     sender_name: str = Field(default="", max_length=200)
     subject: str = Field(default="", max_length=500)
     body: str = Field(min_length=1, max_length=8000)
-    # default="" make a field optional.
+    # default="" makes a field optional.
     # max_length on the email stops someone sending a huge input that costs money or breaks things.
     # min_length=1 on the body rejects empty emails.
 
@@ -86,7 +86,7 @@ class TriageResult(BaseModel):
     def null_to_empty_string(cls, v):
         return "" if v is None else v
 
-    # Same idea for the list field: null becomes an empty list.
+    # Same idea for the list field: Null becomes an empty list.
     @field_validator("missing_information", mode="before")
     @classmethod
     def null_to_empty_list(cls, v):
@@ -129,14 +129,16 @@ def extract_json(text: str) -> dict:
     text = text.strip()
     start, end = text.find("{"), text.rfind("}")
     if start == -1 or end == -1 or end < start:
-        raise ValueError("no JSON object found in model output")
+        raise ValueError(
+            # TODO: Remove this reply snippet before using real client emails (it puts the first 200 characters of the reply in the log).
+            f"no JSON object found in model output: {text[:200]!r}")
     return json.loads(text[start: end + 1])
 
 
 # Sends one email to Gemini and returns the parsed triage JSON.
-# - One attempt, 60s timeout: no hidden retries, so a failure can't burn the daily quota.
+# - One attempt, 60s timeout: No hidden retries, so a failure can't burn the daily quota.
 # - System prompt is re-read from file on each call, so prompt edits apply without a restart.
-# - temperature=0 and JSON mime type: repeatable output for scoring, JSON only (extract_json stays as a safety net).
+# - temperature=0 and JSON mime type: Repeatable output for scoring, JSON only (extract_json stays as a safety net).
 # - thinking_level="low": shorter reasoning, faster and cheaper.
 # - An empty reply is raised as an error rather than parsed.
 def call_gemini(email: EmailIn) -> dict:
@@ -145,7 +147,7 @@ def call_gemini(email: EmailIn) -> dict:
     client = genai.Client(
         http_options=types.HttpOptions(
             retry_options=types.HttpRetryOptions(attempts=1),
-            timeout=60000,  # milliseconds
+            timeout=60000,  # Milliseconds
         )
     )
     response = client.models.generate_content(
@@ -166,8 +168,8 @@ def call_gemini(email: EmailIn) -> dict:
 
 
 # Sends one email to Claude through the Messages API and returns the parsed triage JSON.
-# Plain HTTP call: no SDK, one attempt, 60s timeout. Same prompt and JSON extraction as Gemini.
-# No temperature setting: this model rejects it, so wording may vary slightly between runs.
+# Plain HTTP call: No SDK, one attempt, 60s timeout. Same prompt and JSON extraction as Gemini.
+# No temperature setting: This model rejects it, so wording may vary slightly between runs.
 def call_claude(email: EmailIn) -> dict:
     key = os.getenv("ANTHROPIC_API_KEY")
     if not key:
@@ -201,7 +203,7 @@ def health():
     return {"status": "ok"}
 
 
-# Takes an email and returns a plain dictionary:
+# Stand-in for the AI: Takes an email and returns a plain dictionary in the same shape.
 def mock_triage(email: EmailIn) -> dict:
     """Placeholder for the AI call. Returns a mock result for now."""
     text = f"{email.subject} {email.body}".lower()
@@ -229,7 +231,7 @@ def run_model(email: EmailIn) -> dict:
         f"Unknown PROVIDER '{provider}' (use mock, gemini or claude)")
 
 
-# ---------------------------------------------------------------- guardrails
+# ---- guardrails ----
 # Plain-Python safety checks that run AFTER the model. They never depend on the AI behaving.
 # They can only make things safer: force human review, or raise urgency.
 
@@ -325,7 +327,7 @@ def apply_guardrails(email: EmailIn, result: TriageResult) -> tuple[TriageResult
             existing or extra)
 
     return result, notes
-# ---------------------------------------------------------------- guardrails
+# ---- end of guardrails ----
 
 
 # Run this when someone sends data to /triage (POST is used as it's for submitting email data).
