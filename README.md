@@ -43,8 +43,8 @@ For each email, the API returns a **draft** containing:
 - [x] Code-level guardrails (e.g. flag invented dollar amounts, force review of ATO notices)
 - [x] Automated tests (20 tests, mock mode, no real AI calls)
 - [x] Scoring script and baseline results on 10 emails
-- [ ] Prompt improvement based on baseline failures, with re-scored results
-- [ ] One run on the 10 held-out emails
+- [x] Prompt improvement based on baseline failures, with re-scored results
+- [x] One run on the 10 held-out emails
 - [ ] Manual check of whether each draft reply is safe to send
 
 ## Test data
