@@ -1,5 +1,7 @@
 # Bookkeeper Email Triage
 
+**Triage client emails, flag risks, draft replies. A human always decides.**
+
 A prototype that helps a small bookkeeping practice triage client emails:
 it classifies each email, lists missing information, and drafts a reply
 for the bookkeeper to review. **It never sends anything.**
@@ -34,8 +36,8 @@ flowchart TD
     C --> D["Build prompt<br/>system prompt + email inside delimiters<br/>(delimiters escaped, injection rule)"]
     D --> E{"PROVIDER setting"}
     E -->|"mock"| F1["Mock model<br/>(tests, no API key)"]
-    E -->|"claude"| F2["Claude Haiku"]
-    E -->|"gemini"| F3["Gemini"]
+    E -->|"claude"| F2["Claude<br/>claude-haiku-5-5"]
+    E -->|"gemini"| F3["Gemini<br/>gemini-3.8-flash"]
     F1 --> G["Parse JSON and<br/>validate schema"]
     F2 --> G
     F3 --> G
@@ -54,6 +56,16 @@ flowchart TD
 ```
 
 The AI proposes, the code checks, and a human decides. The guardrails run after the model and do not depend on it behaving.
+
+## Tech stack
+
+- **Language:** Python 3
+- **API:** FastAPI, served with Uvicorn; request and response validation with Pydantic v2
+- **AI models:** Claude (`claude-haiku-5-5`, called over HTTPS with `httpx`) and Google Gemini (`gemini-3.8-flash`, via the `google-genai` SDK); the model is chosen by the `PROVIDER` setting, with a mock mode for tests
+- **Safety:** bearer-token authentication, prompt-injection defences in the prompt, and rule-based guardrails in code
+- **Configuration:** `python-dotenv` and a `.env` file (never committed)
+- **Testing and evaluation:** pytest (20 tests, mock mode) and a scoring script (`score.py`) that runs the labelled test emails and saves raw outputs
+- **Tooling:** Git and GitHub, one commit per build step
 
 ## Safety design
 
@@ -119,6 +131,7 @@ I read all 20 draft replies and marked whether each is safe to send as is (`repl
 
 ## Next steps / potential enhancement
 
+- **Connect it to a real mailbox.** At this stage the API takes one email as JSON; the CSV is only used for testing. In real use, nobody should copy and paste emails. The next step is a connector (Gmail API, Microsoft Graph, or a no-code tool such as Power Automate, Zapier, or Make) that passes each new email to `/triage`, applies a label (for example "ATO notice" or "needs review"), and saves the draft reply in the mailbox for the bookkeeper to edit and send. It would still never send anything. A simple review screen (web page) sorted by urgency is another option. Before this, the practice needs secure hosting, minimum-permission mailbox access, logging, and a privacy check on sending client emails to an AI provider.
 - Test on a small set of real, consented, and anonymised emails from a local bookkeeper, labelled by that bookkeeper.
 - Add guardrails for the unsafe replies found above (instructions about what to do with an ATO notice, requests for tax file numbers or bank details by email).
 - Clarify the boundary between GST/BAS questions and tax-advice questions in the prompt, then re-test on a fresh set of emails.
