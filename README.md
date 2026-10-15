@@ -24,6 +24,37 @@ For each email, the API returns a **draft** containing:
 - a draft reply for the bookkeeper to review and edit
 - a flag when the email needs a human's attention
 
+## How it works
+
+```mermaid
+flowchart TD
+    A["Client email<br/>(text only)"] --> B["POST /triage<br/>bearer token required"]
+    B -->|"Missing or wrong token"| X1["401 Unauthorized"]
+    B --> C["Validate input<br/>(Pydantic)"]
+    C --> D["Build prompt<br/>system prompt + email inside delimiters<br/>(delimiters escaped, injection rule)"]
+    D --> E{"PROVIDER setting"}
+    E -->|"mock"| F1["Mock model<br/>(tests, no API key)"]
+    E -->|"claude"| F2["Claude Haiku"]
+    E -->|"gemini"| F3["Gemini"]
+    F1 --> G["Parse JSON and<br/>validate schema"]
+    F2 --> G
+    F3 --> G
+    F2 -.->|"Provider error or rate limit"| X2["429 / 502 error"]
+    G -->|"Cut-off or unusable output"| X2
+    G --> H["Code guardrails<br/>force review, raise urgency,<br/>flag invented amounts and risky wording,<br/>blank replies to non-clients"]
+    H --> I["Draft response (JSON)<br/>category, urgency, missing info,<br/>draft reply, review flag, guardrail notes"]
+    I --> J["Bookkeeper reviews, edits<br/>and sends manually<br/>(the tool never sends)"]
+
+    classDef human fill:#e8f5e9,stroke:#2e7d32,color:#111
+    classDef err fill:#fdecea,stroke:#c62828,color:#111
+    classDef guard fill:#fff8e1,stroke:#f9a825,color:#111
+    class J human
+    class X1,X2 err
+    class H guard
+```
+
+The AI proposes, the code checks, and a human decides. The guardrails run after the model and do not depend on it behaving.
+
 ## Safety design
 
 - Every output is a draft. Nothing is sent automatically.
