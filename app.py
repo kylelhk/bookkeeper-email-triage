@@ -183,14 +183,18 @@ def call_claude(email: EmailIn) -> dict:
         },
         json={
             "model": os.getenv("ANTHROPIC_MODEL", "claude-haiku-5-5"),
-            "max_tokens": 1200,
+            "max_tokens": 2500,
             "system": SYSTEM_PROMPT_PATH.read_text(encoding="utf-8"),
             "messages": [{"role": "user", "content": build_user_message(email)}],
         },
         timeout=60,
     )
     resp.raise_for_status()
-    blocks = resp.json().get("content", [])
+    data = resp.json()
+    # A reply cut off at the token limit is incomplete JSON, so fail with a clear reason.
+    if data.get("stop_reason") == "max_tokens":
+        raise ValueError("model reply was cut off at max_tokens")
+    blocks = data.get("content", [])
     text = "".join(b.get("text", "")
                    for b in blocks if b.get("type") == "text")
     if not text:
