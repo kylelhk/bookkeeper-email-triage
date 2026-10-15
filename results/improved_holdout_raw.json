@@ -1,0 +1,152 @@
+{
+  "5": {
+    "ok": true,
+    "output": {
+      "category": "INVOICE_BILL_QUERY",
+      "urgency": "HIGH",
+      "summary": "Greg says this is the third time he has asked about an invoice, which he believes is wrong. He will not pay until someone explains it. He is frustrated with the practice.",
+      "missing_information": [
+        "Which invoice is being disputed (invoice number or date)",
+        "Which line item or amount Greg believes is incorrect"
+      ],
+      "draft_reply": "Hi Greg,\n\nThank you for your email, and I'm sorry this has come up more than once without a clear answer. I understand why that's frustrating.\n\nI'll review the invoice personally and make sure you get a clear explanation. To help me find it quickly, could you reply with the invoice number or date, and the line item or amount you think is wrong?\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Client is angry and disputing an invoice, which is a billing matter only the bookkeeper can resolve. The sender's name is not confirmed in the email (only the signature 'Greg'), and the bookkeeper should check the invoice history before replying."
+    }
+  },
+  "8": {
+    "ok": true,
+    "output": {
+      "category": "PAYROLL_SUPER",
+      "urgency": "NORMAL",
+      "summary": "Ben asks whether he must pay superannuation for his 17-year-old casual employee who works only on weekends. This is a super obligation question that needs the bookkeeper's personal advice.",
+      "missing_information": [
+        "Sender identity is not confirmed (signed only 'Ben'). The bookkeeper should match the sender from their records before replying.",
+        "Employee's pay and hours details, if the bookkeeper needs them to answer (the bookkeeper can look these up in payroll records)."
+      ],
+      "draft_reply": "Hi Ben,\n\nThanks for your email about superannuation for your casual employee. Whether super applies in this situation depends on the details of their employment, so I'd like to give you a proper answer rather than a quick guess. I'll review this and come back to you personally.\n\nIf it helps, you could send through the employee's pay and hours for the recent pay periods so I can check our records alongside your question.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Question about whether super must be paid is a super obligation question that requires professional advice. The bookkeeper must answer personally. The sender's identity is also unconfirmed."
+    }
+  },
+  "9": {
+    "ok": true,
+    "output": {
+      "category": "TAX_ADVICE_REQUEST",
+      "urgency": "NORMAL",
+      "summary": "Sender, who did not give a name, believes Bunnings charged GST twice on invoice 4471 and asks what they should do.",
+      "missing_information": [
+        "Sender's name and business name, so the bookkeeper can match them to client records",
+        "Copy of invoice 4471 or the relevant details, if the sender can provide them"
+      ],
+      "draft_reply": "Hello,\n\nThank you for your email about Bunnings invoice 4471. I'm sorry for the trouble this may have caused.\n\nGST questions need careful review, so I will respond to you personally. To help me find your records, could you please reply with your name and business name? If you can also send a copy of invoice 4471, that would be helpful.\n\nKind regards,\n\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Tax/GST question requiring the bookkeeper's personal advice, and the sender is unidentified so their account cannot be matched yet."
+    }
+  },
+  "10": {
+    "ok": true,
+    "output": {
+      "category": "DOCUMENT_SUBMISSION",
+      "urgency": "LOW",
+      "summary": "Lee says they have attached their August bank statement for the BAS. No deadline or question is raised.",
+      "missing_information": [
+        "The attachment is mentioned but is not visible in the email text. Confirm it arrived and is the August statement.",
+        "Confirm whether Lee has more than one bank account, in case other August statements are also needed for the BAS."
+      ],
+      "draft_reply": "Hi Lee,\n\nThanks for sending through your August bank statement for the BAS. If you have statements for any other accounts for August, please send those through as well, so we have the full picture.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": false,
+      "review_reason": ""
+    }
+  },
+  "11": {
+    "ok": true,
+    "output": {
+      "category": "GENERAL_UNCLEAR",
+      "urgency": "NORMAL",
+      "summary": "Jo asks a quick question about 'the thing from last week' and requests a phone call. The email does not say what the item is, so it cannot be matched to a specific task or document.",
+      "missing_information": [
+        "Which item or matter from last week Jo is referring to (for example a document, invoice, BAS or payroll item, and its date or period)"
+      ],
+      "draft_reply": "Hi Jo,\n\nThanks for your message. Could you let me know which item from last week you're asking about? A date, the document name, or the period it relates to would help me find it quickly.\n\nOnce I have that, I'll get back to you. If it's easier, you're welcome to reply here with your question.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "The email is vague and the sender could be a client or someone else, so the bookkeeper should confirm the sender and the item before replying. The request for a phone call is for the bookkeeper to decide on."
+    }
+  },
+  "13": {
+    "ok": true,
+    "output": {
+      "category": "DEADLINE_STATUS",
+      "urgency": "NORMAL",
+      "summary": "Raj (sender name unknown, signed 'Raj') asks when his next BAS is due. No deadline is stated in the email.",
+      "missing_information": [],
+      "draft_reply": "Hi Raj,\n\nThanks for getting in touch. I'll check your records and confirm when your next BAS is due, then come back to you.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": false,
+      "review_reason": ""
+    }
+  },
+  "14": {
+    "ok": true,
+    "output": {
+      "category": "TAX_ADVICE_REQUEST",
+      "urgency": "NORMAL",
+      "summary": "Sender (signed 'Wei') is starting a new business as an Uber driver and house cleaner and asks how to register for GST. Sender name and business details are otherwise unknown; the email does not say whether the business has started trading or has an ABN.",
+      "missing_information": [
+        "When the business started or will start trading",
+        "Whether the business already has an ABN",
+        "Expected income from the Uber driving and house cleaning work, if the bookkeeper needs it to advise on GST registration"
+      ],
+      "draft_reply": "Hi Wei,\n\nThank you for getting in touch about registering for GST for your new business. Whether you need to register, and how to do it, depends on your individual circumstances, so I'd like to look at this properly and respond to you personally.\n\nTo help me prepare, could you let me know when you started or plan to start both the Uber driving and house cleaning work, and whether you already have an ABN? If you have a rough idea of expected income from these activities, please include that too.\n\nI'll be in touch soon.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "GST registration advice is tax advice, which only the bookkeeper can give. The sender is also unidentified, so the bookkeeper should match the sender from their own records before replying."
+    }
+  },
+  "15": {
+    "ok": true,
+    "output": {
+      "category": "REPORTS_REQUEST",
+      "urgency": "HIGH",
+      "summary": "Carla needs a profit and loss report for her bank loan by Friday and has marked the request urgent. The sender's name is not in the email, but it is signed Carla.",
+      "missing_information": [
+        "The period the profit and loss report should cover (for example, a financial year or a date range)",
+        "Which business the report is for, if Carla has more than one"
+      ],
+      "draft_reply": "Hi Carla,\n\nThanks for your email. I understand the bank needs your profit and loss by Friday, and I'll help with this.\n\nCould you please confirm the period the bank needs the report for, such as a financial year or a specific date range? If you have more than one business, please also let me know which one it's for.\n\nOnce I have these details, I'll confirm what I can get to you before Friday.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "The sender's name is not given, so the bookkeeper should match 'Carla' to a client record before replying. The Friday deadline is within 7 days, so the bookkeeper should also confirm whether the report can be ready in time."
+    }
+  },
+  "16": {
+    "ok": true,
+    "output": {
+      "category": "PAYROLL_SUPER",
+      "urgency": "HIGH",
+      "summary": "Kim reports that one of their staff members was underpaid this week and is very upset. Kim asks for it to be fixed today. The staff member's name, the pay period and the amount involved are not stated.",
+      "missing_information": [
+        "Name of the staff member who was underpaid",
+        "Pay period or pay run date affected",
+        "Amount paid compared with the amount expected, or the payslip or timesheet for that period",
+        "Whether the underpayment relates to hours, a rate, allowances or super"
+      ],
+      "draft_reply": "Hi Kim,\n\nThanks for letting me know, and I'm sorry to hear your team member is upset. I'll look into this as a priority. To check the pay run, could you send me the staff member's name, the pay period, and what they were paid compared with what they expected? If you have their payslip or timesheet for that week, please attach it.\n\nOnce I've reviewed it, I'll confirm what I find and the next steps.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Payroll error affecting a staff member with an urgent request. The bookkeeper must check the pay run and decide on any correction. The reply cannot confirm the cause or the amount, and the 'today' timeframe cannot be promised."
+    }
+  },
+  "17": {
+    "ok": true,
+    "output": {
+      "category": "GENERAL_UNCLEAR",
+      "urgency": "NORMAL",
+      "summary": "Sender with no name given sent a very brief email with the subject 'BAS' and the message 'BAS???' plus a prayer emoji. It is not clear whether they are asking about lodgement status, want a BAS prepared, or have a question about a return. No deadline or period is mentioned.",
+      "missing_information": [
+        "Sender's name and business name, so the bookkeeper can match them to a client record",
+        "Which BAS period the question refers to",
+        "What they need: lodgement status, preparation of the BAS, or something else"
+      ],
+      "draft_reply": "Hi there,\n\nThanks for your email about your BAS. So I can look into this for you, could you please let me know your name and business name, which BAS period you're asking about, and what you need (for example, an update on lodgement or help preparing it)?\n\nOnce I have these details, I'll get back to you.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "The sender is unknown and the request is unclear, so the bookkeeper needs to confirm who this is and what they are asking before any reply goes out. Any reply about BAS status would require the bookkeeper's own records."
+    }
+  }
+}

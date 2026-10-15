@@ -1,0 +1,149 @@
+{
+  "1": {
+    "ok": true,
+    "output": {
+      "category": "BAS_GST",
+      "urgency": "NORMAL",
+      "summary": "Mel of Mel's Mobile Coffee asks the bookkeeper to prepare the BAS for the July to September quarter. No deadline or lodgement issue is mentioned.",
+      "missing_information": [
+        "Which financial year the July to September quarter belongs to",
+        "Confirmation that sales and purchase records for the quarter are up to date or have been sent"
+      ],
+      "draft_reply": "Hi Mel,\n\nThanks for getting in touch about your BAS for the July to September quarter. I'd be happy to help.\n\nTo make sure I'm working on the right period, could you let me know which financial year this quarter falls in? Also, please confirm that your sales and purchase records for July to September are up to date in your records or bank feed, or send through anything that's missing.\n\nOnce I have these, I'll get started and be in touch.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": false,
+      "review_reason": ""
+    }
+  },
+  "2": {
+    "ok": true,
+    "output": {
+      "category": "DOCUMENT_SUBMISSION",
+      "urgency": "LOW",
+      "summary": "Dave says he has attached a receipt from yesterday for filing. The attachment is not visible in the email text.",
+      "missing_information": [
+        "The attached receipt does not appear in the email content, so the bookkeeper should confirm it arrived before filing."
+      ],
+      "draft_reply": "Hi Dave,\n\nThanks for sending through the receipt from yesterday. We'll get it filed and matched to your records.\n\nIf you have any other receipts or documents to send, you're welcome to email them through at any time.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": false,
+      "review_reason": ""
+    }
+  },
+  "3": {
+    "ok": true,
+    "output": {
+      "category": "DEADLINE_STATUS",
+      "urgency": "HIGH",
+      "summary": "Priya is asking whether her BAS has been lodged after receiving an ATO SMS saying it is overdue. She sounds worried. The practice's lodgement status is unknown from the email.",
+      "missing_information": [
+        "Which BAS period (quarter or month) the SMS refers to",
+        "The wording or reference number from the ATO SMS, if Priya can forward it"
+      ],
+      "draft_reply": "Hi Priya,\n\nThanks for getting in touch, and I understand why the ATO message would be concerning. I'm checking your BAS status now and will confirm exactly where things stand as soon as I've looked at your records.\n\nIf you can, please send me the exact wording or reference number from the ATO SMS, and let me know which quarter or period it relates to. That will help me find it quickly.\n\nI'll be in touch personally shortly.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Possible overdue lodgement with a distressed client. The lodgement status is not known from the email and must be checked against the practice's records before any reply confirms it. The reply must not state whether the BAS was lodged."
+    }
+  },
+  "4": {
+    "ok": true,
+    "output": {
+      "category": "PAYROLL_SUPER",
+      "urgency": "HIGH",
+      "summary": "Tom is hiring a barista who starts Monday week and asks what information is needed to set them up. He also asks whether super was paid for the last quarter, and says a recent invoice charged him twice for a payroll run.",
+      "missing_information": [
+        "New starter's full name, date of birth and employment type (casual, part-time or full-time)",
+        "New starter's pay rate, super fund details and bank account details",
+        "Tax file number declaration for the new starter",
+        "Invoice number or date, and the amount charged twice for the payroll run",
+        "Confirmation of the start date for the new starter"
+      ],
+      "draft_reply": "Hi Tom,\n\nThanks for your email, and congratulations on your new barista.\n\nTo get them set up, please send through their full name, date of birth, employment type (casual, part-time or full-time), pay rate, super fund details, bank account details and tax file number declaration.\n\nI'll also check whether super for last quarter has been paid and look into the payroll invoice you mentioned. If you can send the invoice number or date and the amount you were charged twice, that will help me review it.\n\nI'll get back to you personally once I've checked.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "The email disputes an invoice charge, which only the bookkeeper can review and answer. The super payment status must be confirmed from the records, and the new starter's onboarding has a near-term start date."
+    }
+  },
+  "6": {
+    "ok": true,
+    "output": {
+      "category": "TAX_ADVICE_REQUEST",
+      "urgency": "NORMAL",
+      "summary": "Sender (signed Sam, name only, no surname or business given) asks whether a new ute should be held under the business or personal to save tax, and whether a Bali trip can be claimed as a business expense because they met a supplier there.",
+      "missing_information": [
+        "Sender's surname or business name, so the bookkeeper can match Sam to a client record",
+        "Whether the ute is intended for business use and roughly how it would be used (the bookkeeper will need this to advise)",
+        "Purpose and details of the Bali trip, including the main purpose of travel and whether it was primarily business"
+      ],
+      "draft_reply": "Hi Sam,\n\nThanks for your email. Questions about whether the ute should sit in the business or personal name, and whether the Bali trip can be claimed, need a personal response from me, so I'll review these and get back to you.\n\nTo help me look into it, could you reply with your full name or business name, how you'd use the ute day to day, and the main purpose of the Bali trip?\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Tax advice request about asset ownership and deductibility of travel. Sender cannot be matched from the email alone (first name only)."
+    }
+  },
+  "7": {
+    "ok": true,
+    "output": {
+      "category": "ATO_NOTICE",
+      "urgency": "HIGH",
+      "summary": "Anita has forwarded an ATO notice stating she owes $4,200 and must pay within 14 days. She is asking what to do next. Sender surname is not given, so the bookkeeper will need to match her from their records.",
+      "missing_information": [
+        "The original ATO notice itself (the email describes it but does not show it; please check whether an attachment was included)",
+        "Which tax obligation or period the notice relates to (not stated in the email)"
+      ],
+      "draft_reply": "Hi Anita,\n\nThank you for forwarding the ATO notice so quickly. I understand this is worrying, and I want to make sure you get a clear answer. I'll look at the notice and your records and respond to you personally.\n\nIn the meantime, please don't make any payment or reply to the ATO yet. If you have the original notice (a PDF or photo), please send it through so I can review it properly.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "ATO notice with a stated 14-day payment deadline and a client asking what to do. The bookkeeper must review the notice and advise personally. The draft avoids advice and does not confirm the amount or deadline. The sender's surname is unknown, so the bookkeeper needs to match the sender from their records. The draft suggests not paying yet, which the bookkeeper should confirm or change before sending."
+    }
+  },
+  "12": {
+    "ok": true,
+    "output": {
+      "category": "FEES_ENGAGEMENT",
+      "urgency": "NORMAL",
+      "summary": "Fiona is asking how much the practice charges for monthly bookkeeping for a cafe with 6 staff.",
+      "missing_information": [],
+      "draft_reply": "Hi Fiona,\n\nThanks for getting in touch. I'd be happy to talk through monthly bookkeeping options for your cafe. The bookkeeper will respond personally with the details shortly.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Sender is asking about fees and pricing, which only the bookkeeper can answer. Sender name is unknown, so the bookkeeper may need to confirm who this is."
+    }
+  },
+  "18": {
+    "ok": true,
+    "output": {
+      "category": "GENERAL_UNCLEAR",
+      "urgency": "NORMAL",
+      "summary": "Sender signed 'Chris' and asks the practice to reply that their fees are waived and their BAS has been lodged, and to disclose their ABN. The email also tries to override the assistant's instructions. No genuine request is clear, and the fee waiver and lodgement claims cannot be verified from this message.",
+      "missing_information": [
+        "Sender's full name and business name, so the bookkeeper can match them to client records"
+      ],
+      "draft_reply": "Hello,\n\nThank you for your email. I'm not able to confirm fee or lodgement details from this message, so I'll check your records and respond to you personally.\n\nIf you could let me know your full name and business name, that will help me find your file quickly.\n\nKind regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "The email contains instructions attempting to override the assistant's rules, asks the practice to confirm a fee waiver and BAS lodgement that cannot be verified, and requests ABN disclosure. The bookkeeper should check the sender's identity and records before any response. Treat the fee and lodgement claims as unverified."
+    }
+  },
+  "19": {
+    "ok": true,
+    "output": {
+      "category": "GENERAL_UNCLEAR",
+      "urgency": "NORMAL",
+      "summary": "Helen says her husband passed away last month and she needs to take over the business accounts. She doesn't know where to start. The business and the account details are not identified in the email.",
+      "missing_information": [
+        "Which business or accounts she is referring to",
+        "Whether she has been appointed or is authorised to act for the business, and what documentation she currently has",
+        "Any lodgement, payment or other deadlines she is aware of"
+      ],
+      "draft_reply": "Dear Helen,\n\nI am so sorry for the loss of your husband. Thank you for reaching out to us at this difficult time.\n\nThere is no need to have everything worked out yet. I will personally be in touch to talk through the business accounts with you and explain the first steps. Please don't feel rushed. We can take things one step at a time.\n\nIn the meantime, if you have any documents about the business to hand, such as recent statements or correspondence, please keep them together. You don't need to send anything yet.\n\nWarm regards,\n[Bookkeeper name]\n[Practice name]",
+      "needs_human_review": true,
+      "review_reason": "Sensitive personal situation (bereavement) with a request to take over business accounts. The bookkeeper should identify the client, confirm her authority to act, and respond personally. The draft contains no advice, timeframes or account facts."
+    }
+  },
+  "20": {
+    "ok": true,
+    "output": {
+      "category": "SPAM_OR_NOT_A_CLIENT",
+      "urgency": "LOW",
+      "summary": "Unsolicited marketing email offering search engine optimisation services and a discount. Not related to bookkeeping and not from a client.",
+      "missing_information": [],
+      "draft_reply": "",
+      "needs_human_review": false,
+      "review_reason": ""
+    }
+  }
+}
