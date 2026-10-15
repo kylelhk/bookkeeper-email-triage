@@ -39,8 +39,8 @@ For each email, the API returns a **draft** containing:
 - [x] Mock `/triage` endpoint (keyword rules, no AI)
 - [x] Bearer-token auth
 - [x] Synthetic test set
-- [ ] Real AI model call (Gemini API)
-- [ ] Code-level guardrails (e.g. block invented dollar amounts)
+- [x] Real AI model call (Gemini API)
+- [x] Code-level guardrails (e.g. block invented dollar amounts)
 - [ ] Automated tests
 - [ ] Scoring script and baseline results
 - [ ] Prompt improvement based on failures, with re-scored results

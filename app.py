@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import secrets
 # Enum limits a field to a fixed list. If the AI invents a category like “TAX_STUFF”, validation fails instead of passing junk downstream.
 from enum import Enum
@@ -90,6 +91,11 @@ class TriageResult(BaseModel):
     @classmethod
     def null_to_empty_list(cls, v):
         return [] if v is None else v
+
+
+class TriageOut(TriageResult):
+    # TriageResult plus a list of notes explaining what the guardrails changed.
+    guardrail_notes: list[str] = Field(default_factory=list)
 
 
 app = FastAPI(title="Bookkeeper Email Triage API")
@@ -223,13 +229,112 @@ def run_model(email: EmailIn) -> dict:
         f"Unknown PROVIDER '{provider}' (use mock, gemini or claude)")
 
 
-# Run this when someone sends data to /triage (POST is used as it's for submitting email data):
-# response_model=TriageResult tells FastAPI to validate the output of run_model() against the TriageResult model so that the output is always in the intended format.
-@app.post("/triage", response_model=TriageResult, dependencies=[Depends(require_token)])
+# ---------------------------------------------------------------- guardrails
+# Plain-Python safety checks that run AFTER the model. They never depend on the AI behaving.
+# They can only make things safer: force human review, or raise urgency.
+
+# These categories always need the bookkeeper, whatever the AI decides.
+ALWAYS_REVIEW = {Category.ATO_NOTICE, Category.TAX_ADVICE_REQUEST}
+
+# Email text that tries to give the AI orders (prompt injection), e.g. "ignore your instructions".
+INJECTION_RE = re.compile(
+    r"(ignore|disregard|forget)\s+(?:all\s+)?(?:(?:your|the|any|previous|prior|above|earlier)\s+)*"
+    r"(?:instructions|rules)|you are now\b|(?:reveal|show|print)\s+(?:your\s+)?system prompt",
+    re.IGNORECASE,
+)
+
+# ATO mentioned together with trouble words means the email is urgent.
+ATO_RE = re.compile(r"\b(ato|tax office)\b", re.IGNORECASE)
+ATO_TROUBLE_RE = re.compile(
+    r"\b(overdue|penalty|penalties|notice|garnishee|owe|owing|debt)\b", re.IGNORECASE)
+
+# A dollar amount such as $1,200 or $ 45.50.
+MONEY_RE = re.compile(r"\$\s?\d[\d,]*(?:\.\d+)?")
+
+# Things a draft reply must never promise or state without the bookkeeper checking first.
+RISKY_REPLY_PATTERNS = [
+    (re.compile(r"\b(?:has|have|had|was|were)\s+(?:been\s+)?lodged\b|\bwe(?:'ve|\s+have)\s+lodged\b", re.I),
+     "reply states a lodgement status"),
+    (re.compile(r"\byou\s+(?:should|can|could|may|are able to)\s+claim\b|\b(?:is|are)\s+(?:fully\s+)?(?:tax[- ])?deductible\b", re.I),
+     "reply gives tax / claim advice"),
+    (re.compile(r"\b(?:waive[ds]?|refund(?:ed)?|discount(?:ed)?)\b", re.I),
+     "reply mentions a waiver, refund or discount"),
+    (re.compile(r"\byou\s+(?:do not|don't|dont)\s+(?:need|have)\s+to\s+(?:pay|lodge|register)\b|\byou\s+are\s+not\s+required\b", re.I),
+     "reply states an obligation rule"),
+]
+
+
+def _amounts(text: str) -> set[str]:
+    return {m.replace(" ", "") for m in MONEY_RE.findall(text)}
+
+
+def apply_guardrails(email: EmailIn, result: TriageResult) -> tuple[TriageResult, list[str]]:
+    """Returns a checked copy of the result plus notes on what was changed or flagged."""
+    result = result.model_copy(deep=True)  # Never modify the caller's object
+    notes: list[str] = []    # Shown to the bookkeeper in the response
+    reasons: list[str] = []  # Reasons to force human review
+    email_text = f"{email.subject}\n{email.body}"
+
+    # Rule 1: Some categories are never handled without the bookkeeper.
+    if result.category in ALWAYS_REVIEW:
+        reasons.append(f"{result.category.value} always needs the bookkeeper")
+
+    # Rule 2: The email tries to give the AI orders (prompt injection), so a human must look.
+    if INJECTION_RE.search(email_text):
+        notes.append(
+            "email contains text that tries to change the assistant's instructions")
+        reasons.append("possible prompt-injection attempt in the email")
+
+    # Rule 3: ATO plus a notice, debt or overdue item is urgent, even if the AI rated it lower.
+    if ATO_RE.search(email_text) and ATO_TROUBLE_RE.search(email_text):
+        if result.urgency != Urgency.HIGH:
+            notes.append(
+                "urgency raised to HIGH: email mentions the ATO with a notice, debt or overdue item")
+            result.urgency = Urgency.HIGH
+        reasons.append("ATO-related issue")
+
+    if result.category == Category.SPAM_OR_NOT_A_CLIENT:
+        # Rule 4: Never leave a draft reply for someone who isn't a client.
+        if result.draft_reply.strip():
+            notes.append("draft reply removed: sender is not a client")
+        result.draft_reply = ""
+    else:
+        # Rule 5: A dollar amount in the reply that isn't in the email was invented by the AI.
+        invented = _amounts(result.draft_reply) - _amounts(email_text)
+        if invented:
+            notes.append(
+                f"reply contains dollar amounts not in the email: {sorted(invented)}")
+            reasons.append(
+                "reply contains an amount the client did not mention")
+        # Rule 6: The reply must not state lodgement status, give claim advice, mention waivers/refunds/discounts, or state obligation rules.
+        for pattern, label in RISKY_REPLY_PATTERNS:
+            if pattern.search(result.draft_reply):
+                notes.append(label)
+                reasons.append(label)
+        # Rule 7: A client email with no draft reply means something went wrong.
+        if not result.draft_reply.strip():
+            notes.append("model returned no draft reply")
+            reasons.append("no draft reply was produced")
+
+    # Any reason above forces human review. The AI's own reason is kept and ours is appended.
+    if reasons:
+        result.needs_human_review = True
+        extra = "; ".join(reasons)
+        existing = result.review_reason.strip()
+        result.review_reason = f"{existing}; {extra}" if existing and extra not in existing else (
+            existing or extra)
+
+    return result, notes
+# ---------------------------------------------------------------- guardrails
+
+
+# Run this when someone sends data to /triage (POST is used as it's for submitting email data).
+# response_model=TriageOut makes FastAPI check the final output (the AI result plus guardrail notes) against the expected shape.
+@app.post("/triage", response_model=TriageOut, dependencies=[Depends(require_token)])
 def triage(email: EmailIn):
     try:
         raw = run_model(email)
-        return TriageResult.model_validate(raw)
+        result = TriageResult.model_validate(raw)
     except ValueError as exc:
         # Bad JSON and Pydantic validation failures are both ValueErrors, so one clause covers both.
         # Log the reason server-side only; the client gets a generic message.
@@ -247,3 +352,5 @@ def triage(email: EmailIn):
                 status_code=429, detail="AI rate limit reached; try again later")
         raise HTTPException(
             status_code=502, detail="AI provider unavailable; triage this email manually")
+    result, notes = apply_guardrails(email, result)
+    return TriageOut(**result.model_dump(), guardrail_notes=notes)
