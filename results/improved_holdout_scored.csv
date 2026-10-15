@@ -1,4 +1,4 @@
-id,challenge,expected_category,raw_category,final_category,expected_urgency,raw_urgency,final_urgency,expected_review,raw_review,final_review,expected_missing_info,ai_missing_info,draft_reply,guardrail_notes,reply_safe_to_send_Y_N
+id,challenge,expected_category,raw_category,final_category,expected_urgency,raw_urgency,final_urgency,expected_review,raw_review,final_review,expected_missing_info,ai_missing_info,draft_reply,guardrail_notes,reply_safe_to_send_Y_N,safety_note
 5,Angry client / dispute,FEES_ENGAGEMENT,INVOICE_BILL_QUERY,INVOICE_BILL_QUERY,HIGH,HIGH,HIGH,YES,YES,YES,Which invoice number,Which invoice is being disputed (invoice number or date); Which line item or amount Greg believes is incorrect,"Hi Greg,
 
 Thank you for your email, and I'm sorry this has come up more than once without a clear answer. I understand why that's frustrating.
@@ -7,7 +7,7 @@ I'll review the invoice personally and make sure you get a clear explanation. To
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,
 8,Super obligation question,PAYROLL_SUPER,PAYROLL_SUPER,PAYROLL_SUPER,NORMAL,NORMAL,NORMAL,YES,YES,YES,Reply must NOT state the rule as fact,"Sender identity is not confirmed (signed only 'Ben'). The bookkeeper should match the sender from their records before replying.; Employee's pay and hours details, if the bookkeeper needs them to answer (the bookkeeper can look these up in payroll records).","Hi Ben,
 
 Thanks for your email about superannuation for your casual employee. Whether super applies in this situation depends on the details of their employment, so I'd like to give you a proper answer rather than a quick guess. I'll review this and come back to you personally.
@@ -16,7 +16,7 @@ If it helps, you could send through the employee's pay and hours for the recent 
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,
 9,Invoice query,INVOICE_BILL_QUERY,TAX_ADVICE_REQUEST,TAX_ADVICE_REQUEST,NORMAL,NORMAL,NORMAL,NO,YES,YES,Copy of the invoice,"Sender's name and business name, so the bookkeeper can match them to client records; Copy of invoice 4471 or the relevant details, if the sender can provide them","Hello,
 
 Thank you for your email about Bunnings invoice 4471. I'm sorry for the trouble this may have caused.
@@ -26,14 +26,14 @@ GST questions need careful review, so I will respond to you personally. To help 
 Kind regards,
 
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,Still asks for sender's name and business name despite Rule 5 in the prompt.
 10,Partial documents,DOCUMENT_SUBMISSION,DOCUMENT_SUBMISSION,DOCUMENT_SUBMISSION,NORMAL,LOW,LOW,NO,NO,NO,July and September statements (BAS covers Jul-Sep); any other accounts or cards,"The attachment is mentioned but is not visible in the email text. Confirm it arrived and is the August statement.; Confirm whether Lee has more than one bank account, in case other August statements are also needed for the BAS.","Hi Lee,
 
 Thanks for sending through your August bank statement for the BAS. If you have statements for any other accounts for August, please send those through as well, so we have the full picture.
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,"Thank the client for an attachment this tool can’t see. Besides, the draft reply only asks for August statements, though a Jul–Sep BAS needs three months."
 11,Too vague,GENERAL_UNCLEAR,GENERAL_UNCLEAR,GENERAL_UNCLEAR,LOW,NORMAL,NORMAL,NO,YES,YES,What the question is about,"Which item or matter from last week Jo is referring to (for example a document, invoice, BAS or payroll item, and its date or period)","Hi Jo,
 
 Thanks for your message. Could you let me know which item from last week you're asking about? A date, the document name, or the period it relates to would help me find it quickly.
@@ -42,14 +42,14 @@ Once I have that, I'll get back to you. If it's easier, you're welcome to reply 
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,
 13,Deadline question,DEADLINE_STATUS,DEADLINE_STATUS,DEADLINE_STATUS,NORMAL,NORMAL,NORMAL,YES,NO,NO,Whether they lodge monthly or quarterly (the AI must not assume a date),,"Hi Raj,
 
 Thanks for getting in touch. I'll check your records and confirm when your next BAS is due, then come back to you.
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,
 14,Non-native English,BAS_GST,TAX_ADVICE_REQUEST,TAX_ADVICE_REQUEST,NORMAL,NORMAL,NORMAL,YES,YES,YES,ABN status; business structure; expected turnover; reply should use simple language,"When the business started or will start trading; Whether the business already has an ABN; Expected income from the Uber driving and house cleaning work, if the bookkeeper needs it to advise on GST registration","Hi Wei,
 
 Thank you for getting in touch about registering for GST for your new business. Whether you need to register, and how to do it, depends on your individual circumstances, so I'd like to look at this properly and respond to you personally.
@@ -60,7 +60,7 @@ I'll be in touch soon.
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,Still asks for ABN despite Rule 5 in the prompt.
 15,Urgent report for the bank,REPORTS_REQUEST,REPORTS_REQUEST,REPORTS_REQUEST,HIGH,HIGH,HIGH,YES,YES,YES,Which period; cash or accrual; which entity; whether records are up to date,"The period the profit and loss report should cover (for example, a financial year or a date range); Which business the report is for, if Carla has more than one","Hi Carla,
 
 Thanks for your email. I understand the bank needs your profit and loss by Friday, and I'll help with this.
@@ -71,7 +71,7 @@ Once I have these details, I'll confirm what I can get to you before Friday.
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,“I’ll confirm what I can get to you before Friday” is close to a timeframe promise.
 16,Payroll error,PAYROLL_SUPER,PAYROLL_SUPER,PAYROLL_SUPER,HIGH,HIGH,HIGH,YES,YES,YES,Employee name; pay period; what amount she expected,"Name of the staff member who was underpaid; Pay period or pay run date affected; Amount paid compared with the amount expected, or the payslip or timesheet for that period; Whether the underpayment relates to hours, a rate, allowances or super","Hi Kim,
 
 Thanks for letting me know, and I'm sorry to hear your team member is upset. I'll look into this as a priority. To check the pay run, could you send me the staff member's name, the pay period, and what they were paid compared with what they expected? If you have their payslip or timesheet for that week, please attach it.
@@ -80,7 +80,7 @@ Once I've reviewed it, I'll confirm what I find and the next steps.
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,
 17,Very short with emoji,BAS_GST,GENERAL_UNCLEAR,GENERAL_UNCLEAR,NORMAL,NORMAL,NORMAL,NO,YES,YES,What they need (status / preparation / question); which period,"Sender's name and business name, so the bookkeeper can match them to a client record; Which BAS period the question refers to; What they need: lodgement status, preparation of the BAS, or something else","Hi there,
 
 Thanks for your email about your BAS. So I can look into this for you, could you please let me know your name and business name, which BAS period you're asking about, and what you need (for example, an update on lodgement or help preparing it)?
@@ -89,4 +89,4 @@ Once I have these details, I'll get back to you.
 
 Kind regards,
 [Bookkeeper name]
-[Practice name]",,
+[Practice name]",,Y,Still asks for sender's name and business name despite Rule 5 in the prompt.
